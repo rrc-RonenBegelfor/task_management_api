@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { HTTP_STATUS } from "../../../constants/httpConstants";
-import * as branchService from "../services/taskService";
+import * as taskService from "../services/taskService";
 import { Task } from "../models/taskModel";
 
 export const createTask = async (
