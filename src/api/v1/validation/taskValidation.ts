@@ -1,9 +1,10 @@
 import Joi from "joi";
+import { TaskRequestModel } from "../models/taskRequestModel";
 
 
 export const taskSchemas = {
     create: {
-        body: Joi.object({
+        body: Joi.object<TaskRequestModel>({
             userId: Joi.string().required().messages({
                 "any.required": "User id is required",
                 "string.empty": "User id cannot be empty",

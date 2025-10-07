@@ -1,8 +1,8 @@
 import express, { Router} from "express";
-import * as branchController from "../controllers/taskController";
+import * as taskController from "../controllers/taskController"
 
 const router: Router = express.Router();
 
-router.post("/", createTask);
+router.post("/", taskController.createTask);
 
 export default router;
