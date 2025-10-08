@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { HTTP_STATUS } from "../../../constants/httpConstants";
 import * as taskService from "../services/taskService";
 import { Task } from "../models/taskModel";
+import { successResponse } from "../models/responseModel";
+import { taskSchemas } from "../validation/taskValidation";
 
 export const createTask = async (
 req: Request,
@@ -9,13 +11,21 @@ res: Response,
 next: NextFunction,
 ): Promise<void> => {
     try {
-        const { userId, title, priority, status, dueDate} = req.body;
+        const { error, value } = taskSchemas.create.body.validate(req.body, { abortEarly: false});
 
-        const newTask: Task = await taskService.createTask({ userId, title, priority, status, dueDate});
+        if (error) {
+            res.status(400).json({
+            message: "Validation failed",
+            details: error.details.map(d => d.message),
+          });
 
-        res.status(HTTP_STATUS.CREATED).json({
-            message: "Task created successfully",
-        });
+          return;
+        }
+
+        const task: Task = value;
+
+        await taskService.createTask({ ...task });
+        res.status(200).json(successResponse({}, "Task created"));  
     } catch (error: unknown) {
         next(error)
     }
