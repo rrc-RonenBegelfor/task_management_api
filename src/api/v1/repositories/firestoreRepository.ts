@@ -117,3 +117,22 @@ export const deleteDocumentsByFieldValues = async (
         );
     }
 };
+
+export const getDocumentById = async (
+    collectionName: string,
+    id: string
+): Promise<FirebaseFirestore.DocumentSnapshot | null> => {
+    try {
+        const doc: FirebaseFirestore.DocumentSnapshot = await db
+            .collection(collectionName)
+            .doc(id)
+            .get();
+        return doc?.exists ? doc : null;
+    } catch (error: unknown) {
+        const errorMessage =
+            error instanceof Error ? error.message : "Unknown error";
+        throw new Error(
+            `Failed to fetch document ${id} from ${collectionName}: ${errorMessage}`
+        );
+    }
+};

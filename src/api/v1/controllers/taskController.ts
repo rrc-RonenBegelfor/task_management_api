@@ -25,7 +25,24 @@ next: NextFunction,
         const task: Task = value;
 
         await taskService.createTask({ ...task });
-        res.status(200).json(successResponse({}, "Task created"));  
+        res.status(HTTP_STATUS.OK).json(successResponse({}, "Task created"));  
+    } catch (error: unknown) {
+        next(error)
+    }
+};
+
+export const deleteTask = async (
+req: Request,
+res: Response,
+next: NextFunction,
+): Promise<void> => {
+    try {
+        const id: string = req.params.id;
+
+        await taskService.deleteTask(id);
+        res.status(HTTP_STATUS.OK).json(
+            successResponse("Task deleted")
+        );
     } catch (error: unknown) {
         next(error)
     }
